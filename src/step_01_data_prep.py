@@ -1,3 +1,4 @@
+import time
 import json
 import random
 from pathlib import Path
@@ -5,6 +6,8 @@ import numpy as np
 import pandas as pd
 
 from step_00_functions import *
+
+start_time = time.time()
 
 # functions
 def pick_irrelevant_question(main_question, all_questions, all_relevant_pmids):
@@ -27,6 +30,7 @@ random.seed(8675309)
 num_questions = len(data['questions'])
 subset_size = max(1, num_questions // 100)
 subset_questions = random.sample(data['questions'], subset_size)
+nonselected_questions = [q for q in data['questions'] if q not in subset_questions]
 
 # create reference set of all relevant PMIDs
 all_relevant_pmids = set(pmid for question in subset_questions for pmid in question['documents'])
@@ -52,7 +56,7 @@ for main_question in subset_questions:
             })
 
     # Pick one clearly irrelevant question
-    irrelevant_question = pick_irrelevant_question(main_question, subset_questions, all_relevant_pmids)
+    irrelevant_question = pick_irrelevant_question(main_question, nonselected_questions, all_relevant_pmids)
 
     if irrelevant_question:
         irrelevant_pmids = irrelevant_question['documents'][:10]
@@ -76,12 +80,19 @@ df = pd.DataFrame(structured_data)
 export_file_path = project_root / "data" / "processed" / "bioasq_embeddings_subset.parquet"
 df.to_parquet(export_file_path, index=False)
 
+num_records = len(df)
+
+end_time = time.time()
+elapsed = end_time - start_time
+
 # test_df = pd.DataFrame({'test_column': ["Don't care"]})
 # test_file_path = project_root / "data" / "processed" / "test_df.csv"
 # test_df.to_csv(test_file_path)
 
-# if __name__ == '__main__':
+if __name__ == '__main__':
     # print(f"Using subset of {len(subset_questions)} questions out of {num_questions}")
     # print(f"PMIDs used in the relevant data set include: {all_relevant_pmids}")
     # print(fetch_abstract("12345678"))
-    # print(f"File saved successfully? {export_file_path.exists()}")
+    print(f"File saved successfully? {export_file_path.exists()}")
+    print(f"{num_records} created.")
+    print(f"Elapsed time: {elapsed:.2f} seconds.")

@@ -1,0 +1,20 @@
+name: env
+channels:
+  - conda-forge
+dependencies:
+  - python=3.12
+  - pytorch
+  - numpy
+  - pandas
+  - scikit-learn
+  - accelerate
+  - ipython
+  - pydantic
+  - transformers
+  - matplotlib
+  - plotly
+  - seaborn
+  - openpyxl
+  - openai
+  - tiktoken
+prefix: /opt/homebrew/Caskroom/miniforge/base/envs/env

@@ -15,3 +15,12 @@ freeze:
 
 test:
 	. env/bin/activate; pytest -vvx
+
+conda_env:
+	conda env create -f environment.yml
+
+conda_create_yaml:
+	conda env export --from-history > environment.yml
+
+conda_update:
+	conda env update -f environment.yml --prune

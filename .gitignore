@@ -4,6 +4,10 @@
 # data files
 data/
 
+.DS_Store
+.zprofile
+dev/modernbert-finetuned/*
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
